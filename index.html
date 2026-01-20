@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es-CR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyTech Services S.A. - Soluciones Tecnológicas Simples, Seguras y Eficientes</title>
+    <meta name="description" content="Servicios de TI en Costa Rica. Soporte técnico, desarrollo web, automatización y soluciones digitales para personas y empresas.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-microchip"></i>
+                    <span>EasyTech Services</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                    <li><a href="#como-ayudamos">Cómo Te Ayudamos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+                <button class="nav-toggle" id="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Soluciones Tecnológicas<br>
+                        <span class="highlight">Simples, Seguras y Eficientes</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Hacemos fácil la tecnología para personas y empresas en Costa Rica. 
+                        Expertos en soporte técnico, desarrollo web y automatización de procesos.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="scrollToSection('servicios')">
+                            <i class="fas fa-search"></i>
+                            Encontrar mi solución
+                        </button>
+                        <button class="btn btn-secondary" onclick="openChatbot()">
+                            <i class="fas fa-comments"></i>
+                            Contactar ahora
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="tech-cards">
+                        <div class="tech-card" data-icon="fa-laptop-code">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="tech-card" data-icon="fa-network-wired">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="tech-card" data-icon="fa-shield-alt">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="tech-card" data-icon="fa-robot">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiénes Somos Section -->
+        <section class="section" id="quienes-somos">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">¿Quiénes Somos?</h2>
+                    <p class="section-subtitle">Tu aliado tecnológico de confianza en Costa Rica</p>
+                </div>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>
+                            En <strong>EasyTech Services S.A.</strong> somos un equipo de expertos apasionados por la tecnología, 
+                            dedicados a hacer que el mundo digital sea simple y accesible para todos.
+                        </p>
+                        <p>
+                            Con años de experiencia en el mercado costarricense, entendemos las necesidades únicas de 
+                            personas, profesionales, pymes e instituciones. Nuestra misión es clara: 
+                            <strong>hacemos fácil la tecnología para nuestros clientes</strong>.
+                        </p>
+                        <div class="about-values">
+                            <div class="value-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Experiencia comprobada</span>
+                            </div>
+                            <div class="value-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Soluciones rápidas y efectivas</span>
+                            </div>
+                            <div class="value-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Soporte continuo y personalizado</span>
+                            </div>
+                            <div class="value-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Enfoque en resultados reales</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-visual">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-number">500+</div>
+                                <div class="stat-label">Clientes Satisfechos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">10+</div>
+                                <div class="stat-label">Años de Experiencia</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">24/7</div>
+                                <div class="stat-label">Soporte Disponible</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">98%</div>
+                                <div class="stat-label">Resolución Primer Contacto</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Servicios Section -->
+        <section class="section section-alt" id="servicios">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Servicios de TI</h2>
+                    <p class="section-subtitle">Soluciones completas para todas tus necesidades tecnológicas</p>
+                </div>
+                <div class="services-grid">
+                    <!-- Soporte Técnico -->
+                    <div class="service-card" data-service="soporte">
+                        <div class="service-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 class="service-title">Soporte Técnico y Servicio Técnico Medio–Avanzado</h3>
+                        <p class="service-description">
+                            Solución experta para problemas de hardware y software, con soporte presencial y remoto.
+                        </p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Soporte técnico presencial y remoto</li>
+                            <li><i class="fas fa-check"></i> Diagnóstico y solución de problemas</li>
+                            <li><i class="fas fa-check"></i> Mantenimiento preventivo y correctivo</li>
+                            <li><i class="fas fa-check"></i> Configuración de equipos y redes</li>
+                            <li><i class="fas fa-check"></i> Seguridad y buenas prácticas</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="selectService('soporte')">
+                            Más información
+                        </button>
+                    </div>
+
+                    <!-- Infraestructura y Redes -->
+                    <div class="service-card" data-service="infraestructura">
+                        <div class="service-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3 class="service-title">Servicios de Infraestructura y Redes</h3>
+                        <p class="service-description">
+                            Diseño e implementación de infraestructuras tecnológicas robustas y escalables.
+                        </p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Instalación y configuración de redes</li>
+                            <li><i class="fas fa-check"></i> Cableado estructurado</li>
+                            <li><i class="fas fa-check"></i> Servidores y soluciones empresariales</li>
+                            <li><i class="fas fa-check"></i> Respaldos y continuidad operativa</li>
+                            <li><i class="fas fa-check"></i> Monitoreo y mantenimiento</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="selectService('infraestructura')">
+                            Más información
+                        </button>
+                    </div>
+
+                    <!-- Desarrollo Web -->
+                    <div class="service-card" data-service="web">
+                        <div class="service-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3 class="service-title">Desarrollo Web</h3>
+                        <p class="service-description">
+                            Creación de sitios web modernos, rápidos y optimizados para tu negocio.
+                        </p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Páginas web corporativas</li>
+                            <li><i class="fas fa-check"></i> Tiendas en línea</li>
+                            <li><i class="fas fa-check"></i> Sitios informativos y landing pages</li>
+                            <li><i class="fas fa-check"></i> Diseño responsive y optimizado</li>
+                            <li><i class="fas fa-check"></i> SEO y rendimiento web</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="selectService('web')">
+                            Más información
+                        </button>
+                    </div>
+
+                    <!-- Automatización -->
+                    <div class="service-card" data-service="automatizacion">
+                        <div class="service-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 class="service-title">Automatización y Soluciones Digitales</h3>
+                        <p class="service-description">
+                            Optimiza tus procesos con tecnología inteligente y automatización.
+                        </p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Automatización de procesos empresariales</li>
+                            <li><i class="fas fa-check"></i> Integración de sistemas</li>
+                            <li><i class="fas fa-check"></i> Chatbots para atención al cliente</li>
+                            <li><i class="fas fa-check"></i> Formularios inteligentes</li>
+                            <li><i class="fas fa-check"></i> Flujos automáticos de atención</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="selectService('automatizacion')">
+                            Más información
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cómo Te Ayudamos Section -->
+        <section class="section" id="como-ayudamos">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">¿Cómo Te Ayudamos?</h2>
+                    <p class="section-subtitle">Un proceso simple y eficiente para resolver tus problemas tecnológicos</p>
+                </div>
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 class="step-title">Identificas tu necesidad</h3>
+                        <p class="step-description">
+                            Cuéntanos qué problema enfrentas o qué solución necesitas. 
+                            Nuestro chatbot puede ayudarte a identificarlo rápidamente.
+                        </p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3 class="step-title">Te asesoramos</h3>
+                        <p class="step-description">
+                            Nuestros expertos analizan tu caso y te recomiendan la mejor solución 
+                            adaptada a tus necesidades y presupuesto.
+                        </p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3 class="step-title">Implementamos la solución</h3>
+                        <p class="step-description">
+                            Ejecutamos la solución de forma profesional y eficiente, 
+                            asegurando resultados de calidad.
+                        </p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3 class="step-title">Te damos soporte continuo</h3>
+                        <p class="step-description">
+                            Acompañamos tu crecimiento con soporte técnico permanente 
+                            y mejoras continuas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacto Section -->
+        <section class="section section-alt" id="contacto">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Contacto</h2>
+                    <p class="section-subtitle">Hablemos sobre cómo podemos ayudarte</p>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>¿Listo para empezar?</h3>
+                        <p>
+                            Contáctanos hoy mismo y descubre cómo nuestras soluciones tecnológicas 
+                            pueden transformar tu negocio o resolver tus problemas técnicos.
+                        </p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <strong>Teléfono</strong>
+                                    <span>+506 2222-3333</span>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <strong>Email</strong>
+                                    <span>info@easytechservices.cr</span>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <i class="fab fa-whatsapp"></i>
+                                <div>
+                                    <strong>WhatsApp</strong>
+                                    <span>+506 8888-9999</span>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <strong>Ubicación</strong>
+                                    <span>San José, Costa Rica</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Nombre completo *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Teléfono</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="service">Tipo de servicio *</label>
+                                <select id="service" name="service" required>
+                                    <option value="">Selecciona un servicio</option>
+                                    <option value="soporte">Soporte Técnico</option>
+                                    <option value="infraestructura">Infraestructura y Redes</option>
+                                    <option value="web">Desarrollo Web</option>
+                                    <option value="automatizacion">Automatización y Soluciones Digitales</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mensaje *</label>
+                                <textarea id="message" name="message" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">
+                                <i class="fas fa-paper-plane"></i>
+                                Enviar mensaje
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-microchip"></i>
+                        <span>EasyTech Services S.A.</span>
+                    </div>
+                    <p>
+                        Soluciones tecnológicas simples, seguras y eficientes 
+                        para personas y empresas en Costa Rica.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="#servicios">Soporte Técnico</a></li>
+                        <li><a href="#servicios">Infraestructura y Redes</a></li>
+                        <li><a href="#servicios">Desarrollo Web</a></li>
+                        <li><a href="#servicios">Automatización Digital</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                        <li><a href="#como-ayudamos">Cómo Te Ayudamos</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> +506 2222-3333</li>
+                        <li><i class="fas fa-envelope"></i> info@easytechservices.cr</li>
+                        <li><i class="fab fa-whatsapp"></i> +506 8888-9999</li>
+                        <li><i class="fas fa-map-marker-alt"></i> San José, Costa Rica</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 EasyTech Services S.A. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chatbot-info">
+                    <h4>Asistente EasyTech</h4>
+                    <span>En línea</span>
+                </div>
+                <button class="chatbot-close" id="chatbotClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>¡Hola! Soy el asistente virtual de EasyTech Services. ¿En qué puedo ayudarte hoy?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <div class="chatbot-options" id="chatbotOptions">
+                    <button class="option-btn" onclick="handleOption('soporte')">
+                        <i class="fas fa-tools"></i>
+                        Soporte Técnico
+                    </button>
+                    <button class="option-btn" onclick="handleOption('web')">
+                        <i class="fas fa-laptop-code"></i>
+                        Desarrollo Web
+                    </button>
+                    <button class="option-btn" onclick="handleOption('automatizacion')">
+                        <i class="fas fa-robot"></i>
+                        Automatización
+                    </button>
+                    <button class="option-btn" onclick="handleOption('infraestructura')">
+                        <i class="fas fa-network-wired"></i>
+                        Redes e Infraestructura
+                    </button>
+                    <button class="option-btn" onclick="handleOption('otro')">
+                        <i class="fas fa-question-circle"></i>
+                        Otra consulta
+                    </button>
+                </div>
+                <div class="chatbot-text-input" id="chatbotTextInput" style="display: none;">
+                    <input type="text" id="chatbotInputField" placeholder="Escribe tu mensaje...">
+                    <button id="sendMessage">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
