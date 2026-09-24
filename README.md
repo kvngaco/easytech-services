@@ -74,7 +74,7 @@ Si cambias el número, actualiza también los enlaces `https://wa.me/...` en `in
 
 ## 📞 Contacto
 
-- **Email**: info@easytechservices.cr
+- **Email**: info@easytechcr.net
 - **Teléfono**: +506 6138-6223
 - **WhatsApp**: +506 6138-6223
 - **Oficina central**: San José, Costa Rica

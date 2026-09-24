@@ -403,4 +403,4 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 // Console branding
 console.log('%c🚀 EasyTech Services S.A.', 'font-size: 20px; font-weight: bold; color: #2563eb;');
 console.log('%cSoluciones Tecnológicas Simples, Seguras y Eficientes', 'font-size: 14px; color: #6b7280;');
-console.log('%c📧 info@easytechservices.cr | 🌐 easytechcr.net', 'font-size: 12px; color: #9ca3af;');
+console.log('%c📧 info@easytechcr.net | 🌐 easytechcr.net', 'font-size: 12px; color: #9ca3af;');
