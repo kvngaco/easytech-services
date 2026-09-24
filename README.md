@@ -59,7 +59,7 @@ El formulario de contacto y el chatbot abren WhatsApp con el mensaje ya escrito.
 El número que recibe los mensajes se configura en `script.js`:
 
 ```js
-const WHATSAPP_NUMBER = '50688889999'; // código de país + número, sin espacios ni signos
+const WHATSAPP_NUMBER = '50661386223'; // código de país + número, sin espacios ni signos
 ```
 
 Si cambias el número, actualiza también los enlaces `https://wa.me/...` en `index.html`
@@ -75,8 +75,8 @@ Si cambias el número, actualiza también los enlaces `https://wa.me/...` en `in
 ## 📞 Contacto
 
 - **Email**: info@easytechservices.cr
-- **Teléfono**: +506 2222-3333
-- **WhatsApp**: +506 8888-9999
+- **Teléfono**: +506 6138-6223
+- **WhatsApp**: +506 6138-6223
 - **Oficina central**: San José, Costa Rica
 - **Cobertura**: Costa Rica, Perú y Argentina
 - **Sitio web**: https://easytechcr.net

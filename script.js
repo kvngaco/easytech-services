@@ -1,6 +1,6 @@
 // Contact configuration
 // Número de WhatsApp que recibe los mensajes: código de país + número, sin espacios ni signos.
-const WHATSAPP_NUMBER = '50688889999';
+const WHATSAPP_NUMBER = '50661386223';
 
 function whatsappUrl(text) {
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
