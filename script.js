@@ -1,4 +1,13 @@
+// Contact configuration
+// Número de WhatsApp que recibe los mensajes: código de país + número, sin espacios ni signos.
+const WHATSAPP_NUMBER = '50688889999';
+
+function whatsappUrl(text) {
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
+
 // DOM Elements
+const header = document.querySelector('.header');
 const navToggle = document.getElementById('nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
 const chatbotToggle = document.getElementById('chatbotToggle');
@@ -12,65 +21,90 @@ const sendMessageBtn = document.getElementById('sendMessage');
 const contactForm = document.getElementById('contactForm');
 
 // Chatbot State
-let chatbotState = 'initial';
 let selectedService = null;
+let lastTopic = null;
 
 // Navigation Toggle
+function setMenuOpen(open) {
+    navMenu.classList.toggle('active', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+}
+
 navToggle.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
+    setMenuOpen(!navMenu.classList.contains('active'));
 });
 
-// Close menu when clicking outside
+// Close menu when clicking outside or on a link
 document.addEventListener('click', (e) => {
     if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-        navMenu.classList.remove('active');
+        setMenuOpen(false);
     }
+});
+
+navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => setMenuOpen(false));
 });
 
 // Chatbot Functions
 function openChatbot() {
     chatbotWindow.classList.add('active');
-    if (chatbotMessages.children.length === 1) {
-        addBotMessage('¡Hola! Soy el asistente virtual de EasyTech Services. ¿En qué puedo ayudarte hoy?');
-    }
+    chatbotToggle.setAttribute('aria-expanded', 'true');
 }
 
 function closeChatbot() {
     chatbotWindow.classList.remove('active');
+    chatbotToggle.setAttribute('aria-expanded', 'false');
 }
 
-chatbotToggle.addEventListener('click', openChatbot);
+chatbotToggle.addEventListener('click', () => {
+    if (chatbotWindow.classList.contains('active')) {
+        closeChatbot();
+    } else {
+        openChatbot();
+    }
+});
 chatbotClose.addEventListener('click', closeChatbot);
 
-// Add message to chat
-function addBotMessage(message) {
+// Add message to chat. Text is always inserted with textContent, never as HTML.
+function addMessage(text, sender, link) {
     const messageDiv = document.createElement('div');
-    messageDiv.className = 'message bot-message';
-    messageDiv.innerHTML = `
-        <div class="message-avatar">
-            <i class="fas fa-robot"></i>
-        </div>
-        <div class="message-content">
-            <p>${message}</p>
-        </div>
-    `;
+    messageDiv.className = `message ${sender}-message`;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    const icon = document.createElement('i');
+    icon.className = sender === 'bot' ? 'fas fa-robot' : 'fas fa-user';
+    avatar.appendChild(icon);
+
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    const p = document.createElement('p');
+    p.textContent = text;
+    content.appendChild(p);
+
+    if (link) {
+        const a = document.createElement('a');
+        a.className = 'chat-link';
+        a.href = link.href;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.innerHTML = '<i class="fab fa-whatsapp"></i> ';
+        a.append(link.label);
+        content.appendChild(a);
+    }
+
+    messageDiv.append(avatar, content);
     chatbotMessages.appendChild(messageDiv);
     scrollToBottom();
+    return messageDiv;
+}
+
+function addBotMessage(message, link) {
+    return addMessage(message, 'bot', link);
 }
 
 function addUserMessage(message) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message user-message';
-    messageDiv.innerHTML = `
-        <div class="message-avatar">
-            <i class="fas fa-user"></i>
-        </div>
-        <div class="message-content">
-            <p>${message}</p>
-        </div>
-    `;
-    chatbotMessages.appendChild(messageDiv);
-    scrollToBottom();
+    return addMessage(message, 'user');
 }
 
 function scrollToBottom() {
@@ -80,10 +114,11 @@ function scrollToBottom() {
 // Handle chatbot options
 function handleOption(option) {
     selectedService = option;
+    lastTopic = getOptionText(option);
     addUserMessage(getOptionText(option));
     chatbotOptions.style.display = 'none';
     chatbotTextInput.style.display = 'flex';
-    
+
     setTimeout(() => {
         handleServiceSelection(option);
     }, 500);
@@ -125,30 +160,29 @@ function handleServiceSelection(service) {
     };
 
     const response = responses[service];
-    addBotMessage(response.message);
-    
+    const messageDiv = addBotMessage(response.message);
+
     // Add suggestion buttons
     setTimeout(() => {
-        addSuggestionButtons(response.suggestions);
+        addSuggestionButtons(messageDiv, response.suggestions);
     }, 1000);
 }
 
-function addSuggestionButtons(suggestions) {
+function addSuggestionButtons(messageDiv, suggestions) {
     const suggestionsDiv = document.createElement('div');
     suggestionsDiv.className = 'suggestions';
-    suggestionsDiv.style.cssText = 'display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;';
-    
+
     suggestions.forEach(suggestion => {
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.className = 'suggestion-btn';
         btn.textContent = suggestion;
-        btn.style.cssText = 'padding: 0.5rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.875rem; cursor: pointer; transition: var(--transition);';
-        btn.onclick = () => handleSuggestion(suggestion);
+        btn.addEventListener('click', () => handleSuggestion(suggestion));
         suggestionsDiv.appendChild(btn);
     });
-    
-    const lastMessage = chatbotMessages.lastElementChild;
-    lastMessage.querySelector('.message-content').appendChild(suggestionsDiv);
+
+    messageDiv.querySelector('.message-content').appendChild(suggestionsDiv);
+    scrollToBottom();
 }
 
 function handleSuggestion(suggestion) {
@@ -156,27 +190,74 @@ function handleSuggestion(suggestion) {
     processUserInput(suggestion);
 }
 
-function processUserInput(input) {
-    const lowerInput = input.toLowerCase();
-    
-    // Simple keyword-based responses
-    if (lowerInput.includes('lenta') || lowerInput.includes('lento')) {
-        addBotMessage('Una computadora lenta puede tener varias causas: malware, programas innecesarios, falta de memoria RAM, o disco duro lleno. Te recomiendo:\n\n1. Escaneo completo de virus\n2. Limpieza de archivos temporales\n3. Revisión de programas al inicio\n4. Evaluación de actualización de hardware\n\n¿Te gustaría que un técnico revise tu equipo? Podemos ayudarte de forma presencial o remota.');
-    } else if (lowerInput.includes('virus') || lowerInput.includes('malware')) {
-        addBotMessage('Los virus y malware son problemas serios. Nuestros expertos pueden:\n\n• Realizar análisis profundos con herramientas profesionales\n• Eliminar amenazas persistentes\n• Recuperar archivos afectados\n• Configurar protección preventiva\n• Educar sobre buenas prácticas de seguridad\n\n¿Prefieres atención remota inmediata o programamos una visita técnica?');
-    } else if (lowerInput.includes('página') || lowerInput.includes('sitio web')) {
-        addBotMessage('Perfecto. Para tu página web necesitamos saber:\n\n• ¿Es para empresa, profesional o proyecto personal?\n• ¿Qué información quieres mostrar?\n• ¿Necesitas formulario de contacto?\n• ¿Tienes logo o identidad visual?\n• ¿Presupuesto aproximado?\n\nCon esta información te daremos una propuesta detallada con tiempo y costo.');
-    } else if (lowerInput.includes('tienda') || lowerInput.includes('vender')) {
-        addBotMessage('¡Excelente! Las tiendas online son un gran negocio. Necesitamos:\n\n• ¿Qué productos o servicios venderás?\n• ¿Métodos de pago que necesitas?\n• ¿Control de inventario?\n• ¿Envíos nacionales o internacionales?\n• ¿Integración con redes sociales?\n\nTe ofrecemos plataformas seguras y fáciles de gestionar. ¿Cuál es tu nicho de mercado?');
-    } else if (lowerInput.includes('red') || lowerInput.includes('internet')) {
-        addBotMessage('Las redes son el corazón de cualquier negocio. Ofrecemos:\n\n• Diseño de topología de red\n• Instalación de cableado estructurado\n• Configuración de routers y switches\n• Redes Wi-Fi seguras y optimizadas\n• VPN para acceso remoto\n• Monitoreo 24/7\n\n¿Cuántos usuarios/equipos necesitas conectar?');
-    } else {
-        addBotMessage('Entiendo tu necesidad. Para darte la mejor solución, me gustaría saber más detalles:\n\n• ¿Es para uso personal o empresarial?\n• ¿Qué tan urgente es?\n• ¿Tienes un presupuesto en mente?\n• ¿Has intentado algo antes?\n\nCon esta información podré recomendarte la solución perfecta o conectar contigo con uno de nuestros especialistas.');
+// Lowercase and strip accents so "página" and "pagina" match the same rule
+function normalizeText(text) {
+    return text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+// Keyword rules, checked in order. Patterns use word boundaries so that,
+// for example, "red" does not match inside "rediseñar".
+const keywordResponses = [
+    {
+        pattern: /\blent[oa]s?\b|\blentitud\b/,
+        message: 'Una computadora lenta puede tener varias causas: malware, programas innecesarios, falta de memoria RAM, o disco duro lleno. Te recomiendo:\n\n1. Escaneo completo de virus\n2. Limpieza de archivos temporales\n3. Revisión de programas al inicio\n4. Evaluación de actualización de hardware\n\n¿Te gustaría que un técnico revise tu equipo? Podemos ayudarte de forma presencial o remota.'
+    },
+    {
+        pattern: /\bvirus\b|\bmalware\b|\bhacke/,
+        message: 'Los virus y malware son problemas serios. Nuestros expertos pueden:\n\n• Realizar análisis profundos con herramientas profesionales\n• Eliminar amenazas persistentes\n• Recuperar archivos afectados\n• Configurar protección preventiva\n• Educar sobre buenas prácticas de seguridad\n\n¿Prefieres atención remota inmediata o programamos una visita técnica?'
+    },
+    {
+        pattern: /\bservidor(es)?\b|\bserver\b/,
+        message: 'Trabajamos con servidores físicos y en la nube. Podemos ayudarte con:\n\n• Diagnóstico de fallas y caídas del servicio\n• Instalación y configuración de servidores\n• Actualizaciones y seguridad\n• Virtualización\n• Monitoreo preventivo\n\n¿Tu servidor está caído en este momento o se trata de un proyecto nuevo?'
+    },
+    {
+        pattern: /\brespaldos?\b|\bbackups?\b|\bcontinuidad\b/,
+        message: 'Los respaldos protegen lo más valioso de tu negocio: la información. Ofrecemos:\n\n• Respaldos automáticos locales y en la nube\n• Políticas de retención\n• Pruebas periódicas de restauración\n• Planes de continuidad operativa\n\n¿Cuántos equipos o servidores necesitas respaldar?'
+    },
+    {
+        pattern: /\bred(es)?\b|\binternet\b|\bwi-?fi\b|\bcablead/,
+        message: 'Las redes son el corazón de cualquier negocio. Ofrecemos:\n\n• Diseño de topología de red\n• Instalación de cableado estructurado\n• Configuración de routers y switches\n• Redes Wi-Fi seguras y optimizadas\n• VPN para acceso remoto\n• Monitoreo 24/7\n\n¿Cuántos usuarios/equipos necesitas conectar?'
+    },
+    {
+        pattern: /\btienda\b|\bvend|\bventas?\b|\becommerce\b/,
+        message: '¡Excelente! Las tiendas online son un gran negocio. Necesitamos:\n\n• ¿Qué productos o servicios venderás?\n• ¿Métodos de pago que necesitas?\n• ¿Control de inventario?\n• ¿Envíos nacionales o internacionales?\n• ¿Integración con redes sociales?\n\nTe ofrecemos plataformas seguras y fáciles de gestionar. ¿Cuál es tu nicho de mercado?'
+    },
+    {
+        pattern: /\bpaginas?\b|\bsitios?\b|\bweb\b|\bredise/,
+        message: 'Perfecto. Para tu página web necesitamos saber:\n\n• ¿Es para empresa, profesional o proyecto personal?\n• ¿Qué información quieres mostrar?\n• ¿Necesitas formulario de contacto?\n• ¿Tienes logo o identidad visual?\n• ¿Presupuesto aproximado?\n\nCon esta información te daremos una propuesta detallada con tiempo y costo.'
+    },
+    {
+        pattern: /\bautomatiz|\bchatbots?\b|\bformularios?\b|\bintegr|\bprocesos?\b|\batencion\b/,
+        message: 'Automatizar te ahorra tiempo y errores. Podemos:\n\n• Conectar tus sistemas para que compartan información\n• Crear formularios que envían datos directamente a donde los necesitas\n• Implementar chatbots de atención 24/7\n• Automatizar reservas, cotizaciones y seguimientos\n\n¿Qué herramientas usas hoy en tu negocio?'
     }
-    
+];
+
+const genericResponse = 'Entiendo tu necesidad. Para darte la mejor solución, me gustaría saber más detalles:\n\n• ¿Es para uso personal o empresarial?\n• ¿Qué tan urgente es?\n• ¿Tienes un presupuesto en mente?\n• ¿Has intentado algo antes?\n\nCon esta información podré recomendarte la solución perfecta o conectar contigo con uno de nuestros especialistas.';
+
+const affirmativePattern = /^(si|claro|ok|okay|dale|por favor|me gustaria|de acuerdo)\b/;
+
+function processUserInput(input) {
+    const text = normalizeText(input.trim());
+
+    if (affirmativePattern.test(text)) {
+        const topic = lastTopic ? ` sobre: ${lastTopic}` : '';
+        addBotMessage(
+            '¡Perfecto! Escríbenos por WhatsApp y un especialista te atenderá para agendar la llamada.',
+            {
+                href: whatsappUrl(`Hola EasyTech, me gustaría agendar una llamada${topic}.`),
+                label: 'Abrir WhatsApp'
+            }
+        );
+        return;
+    }
+
+    lastTopic = input.trim();
+    const rule = keywordResponses.find(r => r.pattern.test(text));
+    addBotMessage(rule ? rule.message : genericResponse);
+
     // Always offer to connect with human
     setTimeout(() => {
-        addBotMessage('¿Te gustaría que uno de nuestros especialistas te contacte directamente para una asesoría personalizada? Puedes dejar tus datos en el formulario de contacto o simplemente dime "sí" y te ayudaré a agendar una llamada.');
+        addBotMessage('¿Te gustaría que uno de nuestros especialistas te contacte directamente para una asesoría personalizada? Responde "sí" y te comunico por WhatsApp, o déjanos tus datos en el formulario de contacto.');
     }, 2000);
 }
 
@@ -191,89 +272,77 @@ function sendMessage() {
 }
 
 sendMessageBtn.addEventListener('click', sendMessage);
-chatbotInputField.addEventListener('keypress', (e) => {
+chatbotInputField.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         sendMessage();
     }
 });
 
-// Contact Form
+// Contact Form: builds the message and opens it in WhatsApp
 contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
     const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData);
-    
+    const data = Object.fromEntries(
+        Array.from(formData.entries(), ([key, value]) => [key, String(value).trim()])
+    );
+
     // Validate form
-    if (!data.name || !data.email || !data.message || !data.service) {
+    if (!data.name || !data.email || !data.country || !data.message || !data.service) {
         showNotification('Por favor completa todos los campos requeridos.', 'error');
         return;
     }
-    
-    // Simulate form submission
-    showNotification('Enviando mensaje...', 'info');
-    
-    setTimeout(() => {
-        showNotification('¡Mensaje enviado con éxito! Te contactaremos pronto.', 'success');
-        contactForm.reset();
-        
-        // Track conversion
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'form_submit', {
-                'event_category': 'contact',
-                'event_label': data.service
-            });
-        }
-    }, 1500);
+
+    const serviceSelect = contactForm.querySelector('#service');
+    const serviceLabel = serviceSelect.options[serviceSelect.selectedIndex].text;
+
+    const lines = [
+        'Hola EasyTech, les escribo desde el sitio web.',
+        '',
+        `*Nombre:* ${data.name}`,
+        `*Email:* ${data.email}`
+    ];
+    if (data.phone) {
+        lines.push(`*Teléfono:* ${data.phone}`);
+    }
+    lines.push(`*País:* ${data.country}`);
+    lines.push(`*Servicio:* ${serviceLabel}`, '', `*Mensaje:* ${data.message}`);
+
+    const url = whatsappUrl(lines.join('\n'));
+    const whatsappWindow = window.open(url, '_blank');
+    if (whatsappWindow) {
+        whatsappWindow.opener = null;
+    } else {
+        // Popup blocked: navigate in the same tab instead
+        window.location.href = url;
+    }
+
+    showNotification('Abriendo WhatsApp… solo presiona "Enviar" en el chat para completar tu mensaje.', 'success');
+    contactForm.reset();
+
+    // Track conversion
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'form_submit', {
+            'event_category': 'contact',
+            'event_label': data.service
+        });
+    }
 });
 
 // Notification System
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 1rem 1.5rem;
-        background: ${type === 'success' ? 'var(--secondary-color)' : type === 'error' ? '#ef4444' : 'var(--primary-color)'};
-        color: white;
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-lg);
-        z-index: 10000;
-        animation: slideIn 0.3s ease-out;
-        max-width: 300px;
-    `;
+    notification.setAttribute('role', type === 'error' ? 'alert' : 'status');
     notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease-out';
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 3000);
-}
 
-// Add animation styles
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-    }
-    .suggestion-btn:hover {
-        background: var(--primary-color) !important;
-        color: white !important;
-        border-color: var(--primary-color) !important;
-    }
-`;
-document.head.appendChild(style);
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.classList.add('notification-out');
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
+}
 
 // Smooth Scrolling
 function scrollToSection(sectionId) {
@@ -285,84 +354,38 @@ function scrollToSection(sectionId) {
 
 // Service Selection
 function selectService(service) {
-    selectedService = service;
     openChatbot();
-    setTimeout(() => {
-        handleServiceSelection(service);
-    }, 500);
+    handleOption(service);
 }
 
 // Header scroll effect
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    const header = document.querySelector('.header');
-    
-    if (currentScroll > 100) {
-        header.style.background = 'rgba(255, 255, 255, 0.98)';
-        header.style.boxShadow = 'var(--shadow-md)';
-    } else {
-        header.style.background = 'rgba(255, 255, 255, 0.95)';
-        header.style.boxShadow = 'none';
-    }
-    
-    lastScroll = currentScroll;
-});
-
-// Intersection Observer for animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe elements for animation
-document.addEventListener('DOMContentLoaded', () => {
-    const animateElements = document.querySelectorAll('.service-card, .step, .stat-item, .about-text');
-    animateElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-        observer.observe(el);
-    });
-});
-
-// Performance optimization - Debounce scroll events
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
+function updateHeader() {
+    header.classList.toggle('scrolled', window.scrollY > 100);
 }
 
-// Lazy loading for images (if any are added later)
-if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries) => {
+window.addEventListener('scroll', updateHeader, { passive: true });
+updateHeader();
+
+// Reveal elements on scroll
+const animateElements = document.querySelectorAll('.service-card, .step, .stat-item, .about-text');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if ('IntersectionObserver' in window && !prefersReducedMotion) {
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                imageObserver.unobserve(img);
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
             }
         });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     });
 
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        imageObserver.observe(img);
+    animateElements.forEach(el => {
+        el.classList.add('reveal');
+        observer.observe(el);
     });
 }
 
@@ -370,39 +393,14 @@ if ('IntersectionObserver' in window) {
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeChatbot();
-        navMenu.classList.remove('active');
+        setMenuOpen(false);
     }
 });
 
-// Add focus management for accessibility
-chatbotToggle.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openChatbot();
-    }
-});
-
-// Initialize tooltips and other interactive elements
-document.addEventListener('DOMContentLoaded', () => {
-    // Add loading states
-    const buttons = document.querySelectorAll('.btn');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (!this.classList.contains('no-loading')) {
-                const originalText = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
-                this.disabled = true;
-                
-                setTimeout(() => {
-                    this.innerHTML = originalText;
-                    this.disabled = false;
-                }, 2000);
-            }
-        });
-    });
-});
+// Current year in footer
+document.getElementById('currentYear').textContent = new Date().getFullYear();
 
 // Console branding
 console.log('%c🚀 EasyTech Services S.A.', 'font-size: 20px; font-weight: bold; color: #2563eb;');
 console.log('%cSoluciones Tecnológicas Simples, Seguras y Eficientes', 'font-size: 14px; color: #6b7280;');
-console.log('%c📧 info@easytechservices.cr | 🌐 www.easytechservices.cr', 'font-size: 12px; color: #9ca3af;');
+console.log('%c📧 info@easytechservices.cr | 🌐 easytechcr.net', 'font-size: 12px; color: #9ca3af;');

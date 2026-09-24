@@ -46,16 +46,28 @@
 
 - ✅ Diseño responsive para todos los dispositivos
 - ✅ Chatbot inteligente con navegación guiada
-- ✅ Formulario de contacto funcional
+- ✅ Formulario de contacto que envía el mensaje por WhatsApp
 - ✅ Animaciones y microinteracciones
 - ✅ Optimizado para SEO
 - ✅ Accesibilidad mejorada
 
 ## 🔧 Personalización
 
-Para personalizar el sitio:
+### Número de WhatsApp
 
-1. **Editar información de contacto** en `index.html`
+El formulario de contacto y el chatbot abren WhatsApp con el mensaje ya escrito.
+El número que recibe los mensajes se configura en `script.js`:
+
+```js
+const WHATSAPP_NUMBER = '50688889999'; // código de país + número, sin espacios ni signos
+```
+
+Si cambias el número, actualiza también los enlaces `https://wa.me/...` en `index.html`
+(sección Contacto y footer).
+
+### Otros cambios
+
+1. **Editar información de contacto** en `index.html` (incluye los datos estructurados JSON-LD del `<head>`)
 2. **Modificar colores** en `styles.css` (variables CSS)
 3. **Ajustar textos** en los archivos HTML
 4. **Configurar dominio personalizado** en Vercel Dashboard
@@ -65,8 +77,10 @@ Para personalizar el sitio:
 - **Email**: info@easytechservices.cr
 - **Teléfono**: +506 2222-3333
 - **WhatsApp**: +506 8888-9999
-- **Ubicación**: San José, Costa Rica
+- **Oficina central**: San José, Costa Rica
+- **Cobertura**: Costa Rica, Perú y Argentina
+- **Sitio web**: https://easytechcr.net
 
 ---
 
-© 2024 EasyTech Services S.A. Todos los derechos reservados.
+© EasyTech Services S.A. Todos los derechos reservados.
